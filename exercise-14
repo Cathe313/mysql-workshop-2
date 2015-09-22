@@ -1,0 +1,247 @@
+
+mysql> CREATE DATABASE Store;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> CREATE TABLE Inventory (id int not null auto_increment PRIMARY KEY, productName VARCHAR(60) not null,  
+productCompany VARCHAR(30) not null, nbInInventory INT unsigned NULL,  price INT unsigned not null);                                                                                                                    
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> DESCRIBE Inventory;
++----------------+------------------+------+-----+---------+----------------+
+| Field          | Type             | Null | Key | Default | Extra          |
++----------------+------------------+------+-----+---------+----------------+
+| id             | int(11)          | NO   | PRI | NULL    | auto_increment |
+| productName    | varchar(60)      | NO   |     | NULL    |                |
+| productCompany | varchar(30)      | NO   |     | NULL    |                |
+| nbInInventory  | int(10) unsigned | YES  |     | NULL    |                |
+| price          | int(10) unsigned | NO   |     | NULL    |                |
++----------------+------------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Customers (id int not null auto_increment PRIMARY KEY, firstName VARCHAR(30) not null, lastName VARCHAR(30) null, email VARCHAR(60) not null, address1 VARCHAR(30) not null, address2 VARCHAR(30) null, city VARCHAR(30) not null, province VARCHAR(10) null, country VARCHAR(30) not null,  postalCode VARCHAR(10) not null, customerSince DATETIME not null);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DESCRIBE Customers;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| id            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| firstName     | varchar(30) | NO   |     | NULL    |                |
+| lastName      | varchar(30) | YES  |     | NULL    |                |
+| email         | varchar(60) | NO   |     | NULL    |                |
+| address1      | varchar(30) | NO   |     | NULL    |                |
+| address2      | varchar(30) | YES  |     | NULL    |                |
+| city          | varchar(30) | NO   |     | NULL    |                |
+| province      | varchar(10) | YES  |     | NULL    |                |
+| country       | varchar(30) | NO   |     | NULL    |                |
+| postalCode    | varchar(10) | NO   |     | NULL    |                |
+| customerSince | datetime    | NO   |     | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+10 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Invoices (id INT not null auto_increment PRIMARY KEY, customerId INT not null, inventoryId INT not null, createdOn DATETIME not null, 
+    -> wasRefunded ENUM('Y', 'N'));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DESCRIBE Invoices;
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| id          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| customerId  | int(11)       | NO   |     | NULL    |                |
+| inventoryId | int(11)       | NO   |     | NULL    |                |
+| createdOn   | datetime      | NO   |     | NULL    |                |
+| wasRefunded | enum('Y','N') | YES  |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+/* POPULATING THE TABLES*/
+
+mysql> INSERT INTO Inventory (productName, productCompany, nbInInventory, price) VALUES ("Cossin", "PlasticCo", 15, 5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Inventory (productName, productCompany, nbInInventory, price) VALUES ("ChoseBine", "PlasticCo", 20, 10);                                       
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Inventory (productName, productCompany, nbInInventory, price) VALUES ("Patente", "ACME", 22, 12);                                             
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Inventory (productName, productCompany, nbInInventory, price) VALUES ("PatenteAGosse", "ACME", 25, 15);                                        
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO Inventory (productName, productCompany, nbInInventory, price) VALUES ("Bidule", "Compagnie inc", 14, 10);                                     
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Inventory (productName, productCompany, price) VALUES ("Objet", "Compagnie inc", 17);                                                         
+Query OK, 1 row affected (0.03 sec)
+
+mysql> SELECT * FROM Inventory;
++----+---------------+----------------+---------------+-------+
+| id | productName   | productCompany | nbInInventory | price |
++----+---------------+----------------+---------------+-------+
+|  1 | Cossin        | PlasticCo      |            15 |     5 |
+|  2 | ChoseBine     | PlasticCo      |            20 |    10 |
+|  3 | Patente       | ACME           |            22 |    12 |
+|  4 | PatenteAGosse | ACME           |            25 |    15 |
+|  5 | Bidule        | Compagnie inc  |            14 |    10 |
+|  6 | Objet         | Compagnie inc  |          NULL |    17 |
++----+---------------+----------------+---------------+-------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO Customers (firstName, lastName, email, address1, city, country, postalCode, customerSince) VALUES ("Ginette", "Tremblay", "ginette@gmail.com", "123 rue Marquette", "Montreal", "Canada", "H7A1E5", "2010-09-23 12:54:33");
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO Customers (firstName, lastName, email, address1, city, country, postalCode, customerSince) VALUES ("Alphonse", "Binette", "alphonse@gmail.com", "456 rue Duval", "Laval", "Canada", "H7A2E5", "2012-01-01 00:34:40");                                                                                                   
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO Customers (firstName, lastName, email, address1, city, country, postalCode, customerSince) VALUES ("Gerard", "Patate", "gerard@gmail.com", "789 rue Dubreuil", "Longueuil", "Canada", "G2A2E5", NOW());                                                                                                  
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO Customers (firstName, lastName, email, address1, city, country, postalCode, customerSince) VALUES ("Angelina", "Jolie", "angie@gmail.com", "1 Fancy Avenue", "Los Angeles", "United States", "12345", CURDATE());                                                                                            
+Query OK, 1 row affected (0.02 sec)
+
+mysql> SELECT * FROM Customers;
++----+-----------+----------+--------------------+-------------------+----------+-------------+---------------+------------+---------------------+----------+
+| id | firstName | lastName | email              | address1          | address2 | city        | country       | postalCode | customerSince       | province |
++----+-----------+----------+--------------------+-------------------+----------+-------------+---------------+------------+---------------------+----------+
+|  1 | Ginette   | Tremblay | ginette@gmail.com  | 123 rue Marquette | NULL     | Montreal    | Canada        | H7A1E5     | 2010-09-23 12:54:33 | NULL     |
+|  2 | Alphonse  | Binette  | alphonse@gmail.com | 456 rue Duval     | NULL     | Laval       | Canada        | H7A2E5     | 2012-01-01 00:34:40 | NULL     |
+|  3 | Gerard    | Patate   | gerard@gmail.com   | 789 rue Dubreuil  | NULL     | Longueuil   | Canada        | G2A2E5     | 2015-09-22 19:23:00 | NULL     |
+|  4 | Angelina  | Jolie    | angie@gmail.com    | 1 Fancy Avenue    | NULL     | Los Angeles | United States | 12345      | 2015-09-22 00:00:00 | NULL     |
++----+-----------+----------+--------------------+-------------------+----------+-------------+---------------+------------+---------------------+----------+
+4 rows in set (0.00 sec)
+
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (1, 2, "2015-01-01 12:30:30", "N");
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (1, 3, "2015-01-02 12:30:30", "Y");                                                     
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (4, 4, "2015-01-02 12:30:30", "N");                                                     
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (5, 3, "2015-01-02 12:30:30", "N");                                                      
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (5, 1, "2015-01-05 12:30:30", "N");                                                      
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (2, 4, "2015-01-06 12:30:30", "Y");                                                      
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (1, 1, "2015-01-09 12:30:30", "Y");                                                      
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (4, 3, "2015-01-10 12:30:30", "N");                                                      
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> INSERT INTO Invoices (inventoryId, customerId, createdOn, wasRefunded) VALUES (5, 2, "2015-01-11 12:30:30", "N");                                                      
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> SELECT * FROM Invoices;
++----+------------+-------------+---------------------+-------------+
+| id | customerId | inventoryId | createdOn           | wasRefunded |
++----+------------+-------------+---------------------+-------------+
+|  1 |          2 |           1 | 2015-01-01 12:30:30 | N           |
+|  2 |          3 |           1 | 2015-01-02 12:30:30 | Y           |
+|  3 |          4 |           4 | 2015-01-02 12:30:30 | N           |
+|  4 |          3 |           5 | 2015-01-02 12:30:30 | N           |
+|  5 |          1 |           5 | 2015-01-05 12:30:30 | N           |
+|  6 |          4 |           2 | 2015-01-06 12:30:30 | Y           |
+|  7 |          3 |           4 | 2015-01-10 12:30:30 | N           |
+|  8 |          1 |           1 | 2015-01-09 12:30:30 | Y           |
+|  9 |          2 |           5 | 2015-01-11 12:30:30 | N           |
++----+------------+-------------+---------------------+-------------+
+9 rows in set (0.00 sec)
+
+
+/*COMMANDS*/
+
+What is the Store's income within a specific date range?
+--------------------------------------------------------
+
+mysql> SELECT SUM(Inventory.price) AS "Revenues" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId && createdOn <= "2015-01-05 00:00:00" &&  createdOn >= "2015-01-01 00:00:00" && wasRefunded != "Y"; 
++----------+
+| Revenues |
++----------+
+|       30 |
++----------+
+1 row in set (0.00 sec)
+
+What is the Store's top selling Inventory product?
+--------------------------------------------------
+
+mysql> SELECT Inventory.productName AS "Top-Selling Product", Invoices.inventoryId AS "Product ID" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC LIMIT 1;
++---------------------+------------+
+| Top-Selling Product | Product ID |
++---------------------+------------+
+| Bidule              |          5 |
++---------------------+------------+
+1 row in set (0.00 sec)
+
+Which company produces the top selling Inventory product?
+---------------------------------------------------------
+
+mysql> SELECT Inventory.productName AS "Top-Selling Product", Inventory.productCompany AS "Company" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC LIMIT 1;                                                                                                                                                         
++---------------------+---------------+
+| Top-Selling Product | Company       |
++---------------------+---------------+
+| Bidule              | Compagnie inc |
++---------------------+---------------+
+1 row in set (0.00 sec)
+
+What is the top refunded Inventory product?
+-------------------------------------------
+
+mysql> SELECT Inventory.productName AS "Most Returned Product", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                                                                                                     
++-----------------------+-------------+----------------+
+| Most Returned Product | inventoryId | Times Refunded |
++-----------------------+-------------+----------------+
+| Cossin                |           1 |              2 |
+| ChoseBine             |           2 |              1 |
++-----------------------+-------------+----------------+
+2 rows in set (0.00 sec)
+
+Which products should be taken out from the Store's Inventory?
+--------------------------------------------------------------
+
+mysql> SELECT Inventory.productName AS "Returned Products", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Product", "Keep Product") AS "Keep it or not?" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                                                             
++-------------------+-------------+----------------+--------------------+-----------------+
+| Returned Products | inventoryId | Times Refunded | Times Not Refunded | Keep it or not? |
++-------------------+-------------+----------------+--------------------+-----------------+
+| Cossin            |           1 |              2 |                  1 | Dump Product    |
+| ChoseBine         |           2 |              1 |                  0 | Dump Product    |
++-------------------+-------------+----------------+--------------------+-----------------+
+2 rows in set (0.00 sec)
+
+Which companies should the Store stop selling products from?
+------------------------------------------------------------
+mysql> SELECT Inventory.productName AS "Returned Products", Inventory.productCompany AS "Troublesome Company", COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Company", "Keep Doing Business With Them") AS "Keep it or not?" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                    
++-------------------+---------------------+----------------+--------------------+-----------------+
+| Returned Products | Troublesome Company | Times Refunded | Times Not Refunded | Keep it or not? |
++-------------------+---------------------+----------------+--------------------+-----------------+
+| Cossin            | PlasticCo           |              2 |                  1 | Dump Company    |
+| ChoseBine         | PlasticCo           |              1 |                  0 | Dump Company    |
++-------------------+---------------------+----------------+--------------------+-----------------+
+2 rows in set (0.00 sec)
+
+
+What is the amount of Internal (Canadian) vs. External sales?
+-------------------------------------------------------------
+mysql> SELECT IF (Customers.country = "Canada", "From Canada", "From Elsewhere") AS "Country of Origin", COUNT(Invoices.createdOn) FROM Customers, Invoices WHERE Customers.id = Invoices.customerId GROUP BY Customers.country;
++-------------------+---------------------------+
+| Country of Origin | COUNT(Invoices.createdOn) |
++-------------------+---------------------------+
+| From Canada       |                         7 |
+| From Elsewhere    |                         2 |
++-------------------+---------------------------+
+2 rows in set (0.00 sec)
+
+
+How many of a specific product remains in Inventory for a specific date?
+------------------------------------------------------------------------
+
+
+
+
