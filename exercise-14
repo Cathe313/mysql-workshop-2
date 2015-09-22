@@ -161,7 +161,9 @@ mysql> SELECT * FROM Invoices;
 What is the Store's income within a specific date range?
 --------------------------------------------------------
 
-mysql> SELECT SUM(Inventory.price) AS "Revenues" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId && createdOn <= "2015-01-05 00:00:00" &&  createdOn >= "2015-01-01 00:00:00" && wasRefunded != "Y"; 
+mysql> SELECT SUM(Inventory.price) AS "Revenues" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId && createdOn <= "2015-01-05 00:00:00" &&  createdOn >= "2015-01-01 00:00:00" && wasRefunded != "Y"; 
 +----------+
 | Revenues |
 +----------+
@@ -172,7 +174,11 @@ mysql> SELECT SUM(Inventory.price) AS "Revenues" FROM Inventory, Invoices WHERE 
 What is the Store's top selling Inventory product?
 --------------------------------------------------
 
-mysql> SELECT Inventory.productName AS "Top-Selling Product", Invoices.inventoryId AS "Product ID" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC LIMIT 1;
+mysql> SELECT Inventory.productName AS "Top-Selling Product", Invoices.inventoryId AS "Product ID" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" 
+GROUP BY Invoices.inventoryId 
+ORDER BY COUNT(*) DESC LIMIT 1;
 +---------------------+------------+
 | Top-Selling Product | Product ID |
 +---------------------+------------+
@@ -183,7 +189,11 @@ mysql> SELECT Inventory.productName AS "Top-Selling Product", Invoices.inventory
 Which company produces the top selling Inventory product?
 ---------------------------------------------------------
 
-mysql> SELECT Inventory.productName AS "Top-Selling Product", Inventory.productCompany AS "Company" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC LIMIT 1;                                                                                                                                                         
+mysql> SELECT Inventory.productName AS "Top-Selling Product", Inventory.productCompany AS "Company" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId  && wasRefunded != "Y" 
+GROUP BY Invoices.inventoryId 
+ORDER BY COUNT(*) DESC LIMIT 1;                                                                                                                                                         
 +---------------------+---------------+
 | Top-Selling Product | Company       |
 +---------------------+---------------+
@@ -194,7 +204,10 @@ mysql> SELECT Inventory.productName AS "Top-Selling Product", Inventory.productC
 What is the top refunded Inventory product?
 -------------------------------------------
 
-mysql> SELECT Inventory.productName AS "Most Returned Product", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                                                                                                     
+mysql> SELECT Inventory.productName AS "Most Returned Product", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId 
+ORDER BY COUNT(*) DESC;                                                                                                                                     
 +-----------------------+-------------+----------------+
 | Most Returned Product | inventoryId | Times Refunded |
 +-----------------------+-------------+----------------+
@@ -206,7 +219,11 @@ mysql> SELECT Inventory.productName AS "Most Returned Product", Invoices.invento
 Which products should be taken out from the Store's Inventory?
 --------------------------------------------------------------
 
-mysql> SELECT Inventory.productName AS "Returned Products", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Product", "Keep Product") AS "Keep it or not?" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                                                             
+mysql> SELECT Inventory.productName AS "Returned Products", Invoices.inventoryId, COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Product", "Keep Product") AS "Keep it or not?" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" 
+GROUP BY Invoices.inventoryId 
+ORDER BY COUNT(*) DESC;                                                                                             
 +-------------------+-------------+----------------+--------------------+-----------------+
 | Returned Products | inventoryId | Times Refunded | Times Not Refunded | Keep it or not? |
 +-------------------+-------------+----------------+--------------------+-----------------+
@@ -217,7 +234,11 @@ mysql> SELECT Inventory.productName AS "Returned Products", Invoices.inventoryId
 
 Which companies should the Store stop selling products from?
 ------------------------------------------------------------
-mysql> SELECT Inventory.productName AS "Returned Products", Inventory.productCompany AS "Troublesome Company", COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Company", "Keep Doing Business With Them") AS "Keep it or not?" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" GROUP BY Invoices.inventoryId ORDER BY COUNT(*) DESC;                                                    
+mysql> SELECT Inventory.productName AS "Returned Products", Inventory.productCompany AS "Troublesome Company", COUNT(wasRefunded="Y") AS "Times Refunded", COUNT(wasRefunded="N") - 1 AS "Times Not Refunded", IF ("Times Refunded" > "Times Not Refunded", "Dump Company", "Keep Doing Business With Them") AS "Keep it or not?" 
+FROM Inventory, Invoices 
+WHERE Inventory.id = Invoices.inventoryId  && wasRefunded = "Y" 
+GROUP BY Invoices.inventoryId 
+ORDER BY COUNT(*) DESC;                                                    
 +-------------------+---------------------+----------------+--------------------+-----------------+
 | Returned Products | Troublesome Company | Times Refunded | Times Not Refunded | Keep it or not? |
 +-------------------+---------------------+----------------+--------------------+-----------------+
@@ -229,7 +250,10 @@ mysql> SELECT Inventory.productName AS "Returned Products", Inventory.productCom
 
 What is the amount of Internal (Canadian) vs. External sales?
 -------------------------------------------------------------
-mysql> SELECT IF (Customers.country = "Canada", "From Canada", "From Elsewhere") AS "Country of Origin", COUNT(Invoices.createdOn) FROM Customers, Invoices WHERE Customers.id = Invoices.customerId GROUP BY Customers.country;
+mysql> SELECT IF (Customers.country = "Canada", "From Canada", "From Elsewhere") AS "Country of Origin", COUNT(Invoices.createdOn) 
+FROM Customers, Invoices 
+WHERE Customers.id = Invoices.customerId 
+GROUP BY Customers.country;
 +-------------------+---------------------------+
 | Country of Origin | COUNT(Invoices.createdOn) |
 +-------------------+---------------------------+
@@ -241,6 +265,20 @@ mysql> SELECT IF (Customers.country = "Canada", "From Canada", "From Elsewhere")
 
 How many of a specific product remains in Inventory for a specific date?
 ------------------------------------------------------------------------
+
+mysql> SET @rank=0;Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT @rank:=@rank+1 AS rank, Inventory.nbInInventory AS "Start Inventory", Invoices.inventoryId AS "ID", Invoices.createdOn AS "Date sold", IF ((Invoices.createdOn) > 0, nbInInventory - @rank , nbInInventory) AS "Remain in Stock" FROM Inventory, Invoices WHERE Inventory.id = Invoices.inventoryId && Inventory.id = 5 && Invoices.wasRefunded="N";
++------+-----------------+----+---------------------+-----------------+
+| rank | Start Inventory | ID | Date sold           | Remain in Stock |
++------+-----------------+----+---------------------+-----------------+
+|    1 |              14 |  5 | 2015-01-02 12:30:30 |              13 |
+|    2 |              14 |  5 | 2015-01-05 12:30:30 |              12 |
+|    3 |              14 |  5 | 2015-01-11 12:30:30 |              11 |
++------+-----------------+----+---------------------+-----------------+
+3 rows in set (0.00 sec)
+
+
 
 
 
