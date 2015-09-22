@@ -1,9 +1,9 @@
 
-mysql> SELECT COUNT(*) FROM Entry WHERE subtype="phone" AND contentLineOne LIKE "%3__%";                                                                      
+mysql> SELECT COUNT(*) FROM Entry WHERE subtype="phone" AND contentLineOne LIKE "3__%" || contentLineOne LIKE "(3__)%" || contentLineOne LIKE "_-3__%";  
 +----------+
 | COUNT(*) |
 +----------+
-|      344 |
+|       60 |
 +----------+
 1 row in set (0.00 sec)
 
